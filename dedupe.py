@@ -8,9 +8,11 @@ DIR=DEFAULT_DIR + "*"
 database = sqlite3.connect("database.db")
 cursor = database.cursor()
 
-#create a table
-#if not cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='hash_DB'"):
-#cursor.execute("""CREATE TABLE hashdb (hash TEXT, filename TEXT)""")
+#create a table if doesnt already exit
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='hashdb'")
+if not cursor.fetchone():
+    cursor.execute("""CREATE TABLE hashdb (hash TEXT, filename TEXT)""")
+    database.commit()
 
 
 
@@ -31,18 +33,20 @@ for filename in files:
 
     
     filename_hash = hasher.hexdigest()
-    cursor.execute("INSERT into hashdb VALUES (?,?)",(filename_hash,filename))
-    database.commit()
-    if not fileDict.get(filename_hash): 
-       fileDict[filename_hash] = filename
+    print(filename_hash)
+    cursor.execute("SELECT filename FROM hashdb WHERE hash=?",(filename_hash,))
+    output = cursor.fetchone()
+
+    if not output : 
+        cursor.execute("INSERT into hashdb VALUES (?,?)",(filename_hash,filename))
+        database.commit()
+
 
     else :
-       print(filename, "is a duplicate")
+       print(filename, "is a duplicate of ", output[0])
 
-    print(filename)
     myPict.close()
 
-print(fileDict.items())
-#myFile.close()
+
 cursor.close()
 database.close()
