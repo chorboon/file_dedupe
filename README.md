@@ -1,0 +1,1 @@
+This simple app attempts to hash files to find duplicates and store in an sqlite3 database.
