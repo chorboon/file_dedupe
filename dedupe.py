@@ -3,7 +3,7 @@
 import glob,hashlib,os,sqlite3
 
 DEFAULT_DIR="./"
-DIR=DEFAULT_DIR + "*"
+DIR=DEFAULT_DIR
 
 database = sqlite3.connect("database.db")
 cursor = database.cursor()
@@ -17,7 +17,7 @@ if not cursor.fetchone():
 
 
 
-files = glob.glob(DIR, recursive=True)
+files = glob.glob("**",recursive=True)
 print(files)
 
 
@@ -31,7 +31,7 @@ for filename in files:
 
     
     filename_hash = hasher.hexdigest()
-    print(filename_hash)
+    #print(filename_hash)
     cursor.execute("SELECT filename,hash FROM hashdb WHERE hash=?",(filename_hash,))
     output = cursor.fetchall()
 
@@ -40,7 +40,7 @@ for filename in files:
         database.commit()
 
 
-    elif filename != output[0][0] :
+    elif filename != output[0][0][2:] :
        print(filename, "is a duplicate of ", output[0][0])
 
     myPict.close()
