@@ -20,8 +20,6 @@ if not cursor.fetchone():
 files = glob.glob(DIR, recursive=True)
 print(files)
 
-fileDict ={}
-#myFile = open('sample.txt','w')
 
 for filename in files:
     if os.path.isdir(filename):
@@ -34,16 +32,16 @@ for filename in files:
     
     filename_hash = hasher.hexdigest()
     print(filename_hash)
-    cursor.execute("SELECT filename FROM hashdb WHERE hash=?",(filename_hash,))
-    output = cursor.fetchone()
+    cursor.execute("SELECT filename,hash FROM hashdb WHERE hash=?",(filename_hash,))
+    output = cursor.fetchall()
 
     if not output : 
         cursor.execute("INSERT into hashdb VALUES (?,?)",(filename_hash,filename))
         database.commit()
 
 
-    else :
-       print(filename, "is a duplicate of ", output[0])
+    elif filename != output[0][0] :
+       print(filename, "is a duplicate of ", output[0][0])
 
     myPict.close()
 
