@@ -40,7 +40,7 @@ for filename in files:
         database.commit()
 
 
-    elif filename != output[0][0][2:] :
+    elif filename != output[0][0] :
        print(filename, "is a duplicate of ", output[0][0])
 
     myPict.close()
