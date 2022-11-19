@@ -52,7 +52,7 @@ for filename in files:
        cursor.execute("UPDATE hashdb SET duplicates=? WHERE filename=?",(duplicates_field,output[0][0]))
        database.commit()
     myPict.close()
-
+#
 
 cursor.close()
 database.close()
