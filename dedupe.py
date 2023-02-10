@@ -10,7 +10,7 @@ database = sqlite3.connect("database.db")
 cursor = database.cursor()
 
 
-#create a table if doesnt already exit
+#create a table if doesnt already exist
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='hashdb'")
 if not cursor.fetchone():
     cursor.execute("""CREATE TABLE hashdb (hash TEXT, filename TEXT, duplicates TEXT)""")
@@ -20,7 +20,7 @@ if not cursor.fetchone():
 
 
 files = glob.glob("**",recursive=True)
-print(files)
+#print(files)
 
 
 for filename in files:
@@ -37,7 +37,7 @@ for filename in files:
 
     
     filename_hash = hasher.hexdigest()
-    #print(filename_hash)
+    
     cursor.execute("SELECT filename,hash,duplicates FROM hashdb WHERE hash=?",(filename_hash,))
     output = cursor.fetchall()
 
